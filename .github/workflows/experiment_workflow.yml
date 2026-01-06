@@ -30,7 +30,7 @@ jobs:
         python automate_RioFerdanaSudrajat.py
 
     - name: Upload Processed Dataset
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: processed-dataset
         path: preprocessing/output/*.csv
