@@ -1,0 +1,36 @@
+name: Automate Preprocessing
+
+on: [push, pull_request]
+
+jobs:
+  preprocess:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.12.7'
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install pandas numpy scikit-learn
+
+    - name: Run Preprocessing Script
+      run: |
+        cd preprocessing
+        # Create output directory if it doesn't exist
+        mkdir -p output 
+        # We need to ensure the script finds the dataset. 
+        # In the repo structure: dataset/bank-full.csv and preprocessing/script.py
+        # The script looks at '../dataset/bank-additional-full.csv' by default which is correct relative to 'preprocessing' folder
+        python automate_RioFerdanaSudrajat.py
+
+    - name: Upload Processed Dataset
+      uses: actions/upload-artifact@v3
+      with:
+        name: processed-dataset
+        path: preprocessing/output/*.csv
